@@ -15,6 +15,8 @@ const UsersPage: React.FC = () => {
   const { data, isLoading, isError, isFetching } = useGetUsersQuery({
     limit: searchParams.pageSize,
     skip: (searchParams.currentPage - 1) * searchParams.pageSize,
+    select:
+      'firstName,lastName,maidenName,age,gender,email,username,bloodGroup,eyeColor,phone,address,university',
   });
 
   const users: IUserTable[] | [] = useMemo(() => {

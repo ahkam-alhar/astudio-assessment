@@ -18,25 +18,10 @@ export interface IUser {
   email: string;
   phone: string;
   username: string;
-  password: string;
-  birthDate: string;
-  image: string;
-  bloodGroup: string;
-  height: number;
-  weight: number;
-  eyeColor: string;
-  hair: Hair;
-  ip: string;
   address: Address;
-  macAddress: string;
+  bloodGroup: string;
+  eyeColor: string;
   university: string;
-  bank: Bank;
-  company: Company;
-  ein: string;
-  ssn: string;
-  userAgent: string;
-  crypto: Crypto;
-  role: string;
 }
 
 export interface Address {

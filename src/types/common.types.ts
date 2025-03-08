@@ -7,6 +7,7 @@ export interface IResponse {
 export interface FilterParams {
   limit?: number;
   skip?: number;
+  select?: string;
 }
 
 export interface SearchPrams {

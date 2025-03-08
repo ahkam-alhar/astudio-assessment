@@ -15,6 +15,8 @@ const ProductsPage: React.FC = () => {
   const { data, isLoading, isError, isFetching } = useGetProductsQuery({
     limit: searchParams.pageSize,
     skip: (searchParams.currentPage - 1) * searchParams.pageSize,
+    select:
+      'sku,title,brand,category,stock,price,rating,reviews,availabilityStatus,warrantyInformation,discountPercentage,minimumOrderQuantity',
   });
 
   const products: IProductTable[] | [] = useMemo(() => {
@@ -62,7 +64,7 @@ const ProductsPage: React.FC = () => {
               'availabilityStatus',
               'warrantyInformation',
               'discountPercentage',
-              'warrantyInformation',
+              'minimumOrderQuantity',
             ]}
           />
           <Pagination
