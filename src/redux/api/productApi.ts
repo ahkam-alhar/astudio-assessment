@@ -10,7 +10,11 @@ export const productApi = createApi({
   endpoints: (builder) => ({
     // Define your endpoints here
     getProducts: builder.query<IProductResponse, FilterParams>({
-      query: (params) => ({ url: '/products', method: 'GET', params }), // API endpoint
+      query: (params) => ({
+        url: '/products',
+        method: 'GET',
+        params,
+      }), // API endpoint
     }),
   }),
 });

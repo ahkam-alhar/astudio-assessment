@@ -4,6 +4,10 @@ export interface IUserResponse extends IResponse {
   users: IUser[];
 }
 
+export interface IUserTable extends IUser {
+  country: string;
+}
+
 export interface IUser {
   id: number;
   firstName: string;

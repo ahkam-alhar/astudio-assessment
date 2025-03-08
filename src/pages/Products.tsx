@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DataTable from '../components/DataTable';
 import Pagination from '../components/Pagination';
 import { useGetProductsQuery } from '../redux/api/productApi';
-import { IProduct } from '../types/product.types';
+import { IProductTable } from '../types/product.types';
 import { SearchPrams } from '../types/common.types';
 import DefaultPageLayout from '../layouts/DefaultPageLayout';
+import NotFound from '../components/NotFound';
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchPrams>({
@@ -16,11 +17,26 @@ const ProductsPage: React.FC = () => {
     skip: (searchParams.currentPage - 1) * searchParams.pageSize,
   });
 
+  const products: IProductTable[] | [] = useMemo(() => {
+    if (data && data.products.length !== 0) {
+      return data.products.map((product) => ({
+        ...product,
+        reviewCount: product.reviews.length,
+        discountPercentage: `${product.discountPercentage}%`,
+      }));
+    }
+    return [];
+  }, [data]);
+
   const onPageChange = (page: number) => {
     setSearchParams((prevState) => ({
       ...prevState,
       currentPage: page,
     }));
+    window.scroll({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   const onPageSizeChange = (size: number) => {
@@ -30,19 +46,36 @@ const ProductsPage: React.FC = () => {
   return (
     <DefaultPageLayout isLoading={isLoading || isFetching} title="Products">
       {isError && <p>Error</p>}
-      {!isLoading && !isError && (
-        <DataTable
-          data={data?.products as IProduct[]}
-          columns={['title', 'brand', 'category', 'stock']}
-        />
+      {products.length !== 0 ? (
+        <>
+          <DataTable
+            data={products}
+            headers={[
+              'sku',
+              'title',
+              'brand',
+              'category',
+              'stock',
+              'price',
+              'rating',
+              'reviewCount',
+              'availabilityStatus',
+              'warrantyInformation',
+              'discountPercentage',
+              'warrantyInformation',
+            ]}
+          />
+          <Pagination
+            totalCount={data?.total as number}
+            currentPage={searchParams.currentPage}
+            onPageChange={onPageChange}
+            pageSize={searchParams.pageSize}
+            onPageSizeChange={onPageSizeChange}
+          />
+        </>
+      ) : (
+        <>{!isLoading && <NotFound />}</>
       )}
-      <Pagination
-        totalCount={data?.total as number}
-        currentPage={searchParams.currentPage}
-        onPageChange={onPageChange}
-        pageSize={searchParams.pageSize}
-        onPageSizeChange={onPageSizeChange}
-      />
     </DefaultPageLayout>
   );
 };

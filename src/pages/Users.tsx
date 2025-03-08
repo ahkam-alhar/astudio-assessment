@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import DataTable from '../components/DataTable';
 import { useGetUsersQuery } from '../redux/api/userApi';
-import { IUser } from '../types/user.types';
+import { IUserTable } from '../types/user.types';
 import { SearchPrams } from '../types/common.types';
 import Pagination from '../components/Pagination';
 import DefaultPageLayout from '../layouts/DefaultPageLayout';
+import NotFound from '../components/NotFound';
 
 const UsersPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchPrams>({
@@ -16,11 +17,26 @@ const UsersPage: React.FC = () => {
     skip: (searchParams.currentPage - 1) * searchParams.pageSize,
   });
 
+  const users: IUserTable[] | [] = useMemo(() => {
+    if (data && data.users.length !== 0) {
+      return data.users.map((user) => ({
+        ...user,
+        country: user.address.country,
+        gender: user.gender === 'male' ? 'M' : 'F',
+      }));
+    }
+    return [];
+  }, [data]);
+
   const onPageChange = (page: number) => {
     setSearchParams((prevState) => ({
       ...prevState,
       currentPage: page,
     }));
+    window.scroll({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   const onPageSizeChange = (size: number) => {
@@ -30,19 +46,36 @@ const UsersPage: React.FC = () => {
   return (
     <DefaultPageLayout title="Users" isLoading={isLoading || isFetching}>
       {isError && <p>Error</p>}
-      {!isLoading && !isError && (
-        <DataTable
-          data={data?.users as IUser[]}
-          columns={['name', 'email', 'birthDate', 'gender']}
-        />
+      {users.length !== 0 ? (
+        <>
+          <DataTable
+            data={users}
+            headers={[
+              'firstName',
+              'lastName',
+              'maidenName',
+              'age',
+              'gender',
+              'email',
+              'username',
+              'bloodGroup',
+              'eyeColor',
+              'phone',
+              'country',
+              'university',
+            ]}
+          />
+          <Pagination
+            totalCount={data?.total as number}
+            currentPage={searchParams.currentPage}
+            onPageChange={onPageChange}
+            pageSize={searchParams.pageSize}
+            onPageSizeChange={onPageSizeChange}
+          />
+        </>
+      ) : (
+        <>{!isLoading && <NotFound />}</>
       )}
-      <Pagination
-        totalCount={data?.total as number}
-        currentPage={searchParams.currentPage}
-        onPageChange={onPageChange}
-        pageSize={searchParams.pageSize}
-        onPageSizeChange={onPageSizeChange}
-      />
     </DefaultPageLayout>
   );
 };
