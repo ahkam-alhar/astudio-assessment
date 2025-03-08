@@ -53,7 +53,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-2 rounded-lg bg-[#ebebeb] text-[#322625] disabled:opacity-50"
+        className="px-3 py-2 rounded-lg bg-grey text-black disabled:opacity-50"
       >
         Prev
       </button>
@@ -66,14 +66,14 @@ const Pagination: React.FC<PaginationProps> = ({
             className={`px-4 py-2 rounded-lg border transition-all duration-200
               ${
                 currentPage === page
-                  ? 'bg-[#322625] text-white font-bold'
-                  : 'bg-[#c0e3e5] text-[#322625] hover:bg-[#fdc936]'
+                  ? 'bg-black text-white font-bold'
+                  : 'bg-blue text-black hover:bg-yellow'
               }`}
           >
             {page}
           </button>
         ) : (
-          <span key={`ellipsis-${index}`} className="px-2 text-[#322625]">
+          <span key={`ellipsis-${index}`} className="px-2 text-black">
             {page}
           </span>
         )
@@ -82,7 +82,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-2 rounded-lg bg-[#ebebeb] text-[#322625] disabled:opacity-50"
+        className="px-3 py-2 rounded-lg bg-grey text-black disabled:opacity-50"
       >
         Next
       </button>
@@ -90,7 +90,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <select
         value={pageSize}
         onChange={(e) => onPageSizeChange(Number(e.target.value))}
-        className="ml-4 px-3 py-2 rounded-lg border bg-[#ebebeb] text-[#322625]"
+        className="ml-4 px-3 py-2 rounded-lg border bg-grey text-black"
       >
         {[5, 10, 20, 50].map((size) => (
           <option key={size} value={size}>

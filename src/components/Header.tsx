@@ -5,24 +5,24 @@ const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-[#322625] text-white relative h-12">
+    <nav className="bg-black text-white relative h-12">
       <div className="container flex justify-between items-center h-full">
         <h1 className="text-xl font-bold">My App</h1>
         <div
-          className={`absolute sm:static top-full right-0 w-auto bg-[#322625] sm:flex sm:space-x-4 ${
+          className={`absolute sm:static top-full right-0 w-auto bg-black sm:flex sm:space-x-4 ${
             isOpen ? 'block' : 'hidden'
           }`}
         >
           <Link
             to="/users"
-            className="block py-2 px-4 hover:text-[#fdc936]"
+            className="block py-2 px-4 hover:text-yellow"
             onClick={() => setIsOpen(false)} // Close the menu on link click
           >
             Users
           </Link>
           <Link
             to="/products"
-            className="block py-2 px-4 hover:text-[#fdc936]"
+            className="block py-2 px-4 hover:text-yellow"
             onClick={() => setIsOpen(false)} // Close the menu on link click
           >
             Products
