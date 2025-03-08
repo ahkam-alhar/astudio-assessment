@@ -22,17 +22,19 @@ const UserFilter: React.FC<UserFilterProps> = ({
       onSearch={onSearch}
       pageSize={pageSize}
     >
-      {filters.map((filter) => (
-        <button
-          key={filter.value}
-          onClick={() => onFilterSelect(filter.value)}
-          className={`px-4 py-2 text-white rounded-lg hover:bg-blue ${
-            filter.isSelected ? 'bg-blue' : 'bg-yellow'
-          }`}
-        >
-          {filter.label}
-        </button>
-      ))}
+      <div className="flex flex-wrap justify-center gap-4">
+        {filters.map((filter) => (
+          <button
+            key={filter.value}
+            onClick={() => onFilterSelect(filter.value)}
+            className={`px-4 py-2 text-white rounded-lg hover:bg-blue ${
+              filter.isSelected ? 'bg-blue' : 'bg-yellow'
+            }`}
+          >
+            {filter.label}
+          </button>
+        ))}
+      </div>
     </Filter>
   );
 };

@@ -47,11 +47,11 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-center space-x-2 p-4">
+    <div className="flex flex-wrap items-center justify-center space-x-2 space-y-2 py-4">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-3 py-2 rounded-lg bg-grey text-black disabled:opacity-50"
+        className="px-1 py-1 sm:px-3 sm:py-2 rounded-lg bg-grey text-black disabled:opacity-50 mt-2"
       >
         Prev
       </button>
@@ -61,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = ({
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`px-4 py-2 rounded-lg border transition-all duration-200
+            className={`px-1 py-1 sm:px-4 sm:py-2 rounded-lg border transition-all duration-200
               ${
                 currentPage === page
                   ? 'bg-black text-white font-bold'
@@ -71,7 +71,7 @@ const Pagination: React.FC<PaginationProps> = ({
             {page}
           </button>
         ) : (
-          <span key={`ellipsis-${index}`} className="px-2 text-black">
+          <span key={`ellipsis-${index}`} className="px-1 sm:px-2 text-black">
             {page}
           </span>
         )
@@ -80,7 +80,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-3 py-2 rounded-lg bg-grey text-black disabled:opacity-50"
+        className="px-1 py-1 sm:px-3 sm:py-2 rounded-lg bg-grey text-black disabled:opacity-50"
       >
         Next
       </button>

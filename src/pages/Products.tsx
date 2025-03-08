@@ -66,7 +66,7 @@ const ProductsPage: React.FC = () => {
         value: val.slug,
       }));
 
-      return [{ label: 'All', value: 'All' }, ...data];
+      return [{ label: 'All categories', value: 'All' }, ...data];
     }
     return [];
   }, [categoriesData]);

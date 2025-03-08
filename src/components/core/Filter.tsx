@@ -14,7 +14,7 @@ const Filter: React.FC<FilterProps> = ({
   children,
 }) => {
   return (
-    <div className="flex flex-wrap items-center gap-4 p-4">
+    <div className="flex flex-wrap items-center justify-center gap-4 p-4">
       <select
         value={pageSize}
         onChange={(e) => onPageSizeChange(Number(e.target.value))}
