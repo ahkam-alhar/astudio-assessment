@@ -2,4 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Neutra+Text&display=swap');
+@font-face {
+  font-family: 'Neutra Text';
+  src: url('../public/fonts/neutra-text.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Neutra Text', sans-serif;
+}
