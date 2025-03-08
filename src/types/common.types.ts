@@ -13,4 +13,12 @@ export interface FilterParams {
 export interface SearchPrams {
   pageSize: number;
   currentPage: number;
+  searchText: string;
+  filterKey: string;
+}
+
+export interface FilterButtonProps {
+  label: string;
+  value: string;
+  isSelected: boolean;
 }

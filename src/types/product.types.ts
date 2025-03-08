@@ -1,4 +1,4 @@
-import { IResponse } from './common.types';
+import { FilterParams, IResponse } from './common.types';
 
 export interface IProductResponse extends IResponse {
   products: IProduct[];
@@ -6,6 +6,10 @@ export interface IProductResponse extends IResponse {
 
 export interface IProductTable extends IProduct {
   reviewCount: number;
+}
+
+export interface ProductFilterParams extends FilterParams {
+  category?: string;
 }
 
 export interface IProduct {
@@ -24,23 +28,10 @@ export interface IProduct {
   minimumOrderQuantity: number;
 }
 
-export interface Dimensions {
-  width: number;
-  height: number;
-  depth: number;
-}
-
 export interface Review {
   rating: number;
   comment: string;
   date: string;
   reviewerName: string;
   reviewerEmail: string;
-}
-
-export interface Meta {
-  createdAt: string;
-  updatedAt: string;
-  barcode: string;
-  qrCode: string;
 }

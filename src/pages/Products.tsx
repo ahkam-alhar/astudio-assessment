@@ -1,34 +1,59 @@
 import { useMemo, useState } from 'react';
 import DataTable from '../components/DataTable';
 import Pagination from '../components/Pagination';
-import { useGetProductsQuery } from '../redux/api/productApi';
+import {
+  useGetGategoriesQuery,
+  useGetProductsQuery,
+} from '../redux/api/productApi';
 import { IProductTable } from '../types/product.types';
 import { SearchPrams } from '../types/common.types';
 import DefaultPageLayout from '../layouts/DefaultPageLayout';
 import NotFound from '../components/NotFound';
+import { filterData } from '../utils/filterData';
+import ProductFilter from '../components/ProductFilter';
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchPrams>({
     pageSize: 5,
     currentPage: 1,
+    searchText: '',
+    filterKey: '',
   });
-  const { data, isLoading, isError, isFetching } = useGetProductsQuery({
-    limit: searchParams.pageSize,
-    skip: (searchParams.currentPage - 1) * searchParams.pageSize,
-    select:
-      'sku,title,brand,category,stock,price,rating,reviews,availabilityStatus,warrantyInformation,discountPercentage,minimumOrderQuantity',
-  });
+  const { data, isLoading, isError, isFetching } = useGetProductsQuery(
+    {
+      limit: searchParams.pageSize,
+      skip: (searchParams.currentPage - 1) * searchParams.pageSize,
+      select:
+        'sku,title,brand,category,stock,price,rating,reviews,availabilityStatus,warrantyInformation,discountPercentage,minimumOrderQuantity',
+      category: searchParams.filterKey,
+    },
+    { skip: searchParams.searchText !== '' && searchParams.filterKey === '' }
+  );
+
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useGetGategoriesQuery();
 
   const products: IProductTable[] | [] = useMemo(() => {
-    if (data && data.products.length !== 0) {
+    if (data && data.products.length !== 0 && searchParams.searchText !== '') {
+      const modifiedData = data.products.map((product) => ({
+        ...product,
+        reviewCount: product.reviews.length,
+        discountPercentage: `${product.discountPercentage}%`,
+      }));
+      return filterData(modifiedData, searchParams.searchText);
+    } else if (data && data.products.length !== 0) {
       return data.products.map((product) => ({
         ...product,
         reviewCount: product.reviews.length,
         discountPercentage: `${product.discountPercentage}%`,
       }));
     }
+
     return [];
-  }, [data]);
+  }, [data, searchParams.searchText]);
 
   const onPageChange = (page: number) => {
     setSearchParams((prevState) => ({
@@ -42,12 +67,37 @@ const ProductsPage: React.FC = () => {
   };
 
   const onPageSizeChange = (size: number) => {
-    setSearchParams({ pageSize: size, currentPage: 1 });
+    setSearchParams((prevState) => ({
+      ...prevState,
+      pageSize: size,
+      currentPage: 1,
+    }));
+  };
+
+  const onSearch = (value: string) => {
+    setSearchParams((prevState) => ({ ...prevState, searchText: value }));
+  };
+
+  const onCategoryChange = (value: string) => {
+    setSearchParams((prevState) => ({ ...prevState, filterKey: value }));
   };
 
   return (
-    <DefaultPageLayout isLoading={isLoading || isFetching} title="Products">
-      {isError && <p>Error</p>}
+    <DefaultPageLayout
+      isLoading={isLoading || isFetching || categoriesLoading}
+      title="Products"
+    >
+      {(isError || categoriesError) && <p>Error</p>}
+      {categories && categories.length !== 0 && (
+        <ProductFilter
+          filters={categories ? ['', ...categories] : []}
+          dropDownValue={searchParams.filterKey}
+          onSearch={onSearch}
+          onPageSizeChange={onPageSizeChange}
+          pageSize={searchParams.pageSize}
+          onCategoryChange={onCategoryChange}
+        />
+      )}
       {products.length !== 0 ? (
         <>
           <DataTable
@@ -67,13 +117,14 @@ const ProductsPage: React.FC = () => {
               'minimumOrderQuantity',
             ]}
           />
-          <Pagination
-            totalCount={data?.total as number}
-            currentPage={searchParams.currentPage}
-            onPageChange={onPageChange}
-            pageSize={searchParams.pageSize}
-            onPageSizeChange={onPageSizeChange}
-          />
+          {searchParams.searchText === '' && (
+            <Pagination
+              totalCount={data?.total as number}
+              currentPage={searchParams.currentPage}
+              onPageChange={onPageChange}
+              pageSize={searchParams.pageSize}
+            />
+          )}
         </>
       ) : (
         <>{!isLoading && <NotFound />}</>

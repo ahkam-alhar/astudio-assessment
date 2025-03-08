@@ -1,16 +1,25 @@
 // api/userApi.ts
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '../utils/apiUtils';
-import { IUserResponse } from '../../types/user.types';
-import { FilterParams } from '../../types/common.types';
+import { IUserResponse, UserFilterParams } from '../../types/user.types';
 
 export const userApi = createApi({
   reducerPath: 'userApi', // Unique key for the reducer
   baseQuery: axiosBaseQuery(), // Use the custom Axios baseQuery
   endpoints: (builder) => ({
     // Define your endpoints here
-    getUsers: builder.query<IUserResponse, FilterParams>({
-      query: (params) => ({ url: '/users', method: 'GET', params }), // API endpoint
+    getUsers: builder.query<IUserResponse, UserFilterParams>({
+      query: (params) => {
+        if (params.key !== '') {
+          return {
+            url: '/users/filter',
+            method: 'GET',
+            params,
+          };
+        }
+
+        return { url: '/users', method: 'GET', params };
+      }, // API endpoint
     }),
   }),
 });

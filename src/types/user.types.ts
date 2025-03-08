@@ -1,4 +1,4 @@
-import { IResponse } from './common.types';
+import { FilterParams, IResponse } from './common.types';
 
 export interface IUserResponse extends IResponse {
   users: IUser[];
@@ -6,6 +6,11 @@ export interface IUserResponse extends IResponse {
 
 export interface IUserTable extends IUser {
   country: string;
+}
+
+export interface UserFilterParams extends FilterParams {
+  key?: string;
+  value?: string;
 }
 
 export interface IUser {
@@ -37,30 +42,4 @@ export interface Address {
 export interface Coordinates {
   lat: number;
   lng: number;
-}
-
-export interface Bank {
-  cardExpire: string;
-  cardNumber: string;
-  cardType: string;
-  currency: string;
-  iban: string;
-}
-
-export interface Company {
-  department: string;
-  name: string;
-  title: string;
-  address: Address;
-}
-
-export interface Crypto {
-  coin: string;
-  wallet: string;
-  network: string;
-}
-
-export interface Hair {
-  color: string;
-  type: string;
 }

@@ -5,7 +5,6 @@ interface PaginationProps {
   currentPage: number;
   onPageChange: (page: number) => void;
   pageSize: number;
-  onPageSizeChange: (size: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -13,7 +12,6 @@ const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   onPageChange,
   pageSize,
-  onPageSizeChange,
 }) => {
   const totalPages = Math.ceil(totalCount / pageSize);
   const maxPagesToShow = 5;
@@ -86,18 +84,6 @@ const Pagination: React.FC<PaginationProps> = ({
       >
         Next
       </button>
-
-      <select
-        value={pageSize}
-        onChange={(e) => onPageSizeChange(Number(e.target.value))}
-        className="ml-4 px-3 py-2 rounded-lg border bg-grey text-black"
-      >
-        {[5, 10, 20, 50].map((size) => (
-          <option key={size} value={size}>
-            {size} per page
-          </option>
-        ))}
-      </select>
     </div>
   );
 };
