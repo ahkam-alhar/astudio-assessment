@@ -8,6 +8,7 @@ import DefaultPageLayout from '../layouts/DefaultPageLayout';
 import NotFound from '../components/NotFound';
 import { filterData } from '../utils/filterData';
 import UserFilter from '../components/UserFilter';
+import { useDebounce } from '../hooks/useDebounce';
 
 const userFilters: FilterButtonProps[] = [
   {
@@ -45,6 +46,8 @@ const UsersPage: React.FC = () => {
     searchText: '',
     filterKey: '',
   });
+  const debouncedSearch = useDebounce(searchParams.searchText, 300);
+
   const { data, isLoading, isError, isFetching } = useGetUsersQuery(
     {
       limit: searchParams.pageSize,
@@ -52,23 +55,23 @@ const UsersPage: React.FC = () => {
       select:
         'firstName,lastName,maidenName,age,gender,email,username,bloodGroup,eyeColor,phone,address,university',
       key: searchParams.filterKey,
-      value: searchParams.searchText,
+      value: debouncedSearch,
     },
-    { skip: searchParams.searchText !== '' && searchParams.filterKey === '' }
+    { skip: debouncedSearch !== '' && searchParams.filterKey === '' }
   );
 
   const users: IUserTable[] | [] = useMemo(() => {
     if (
       data &&
       data.users.length !== 0 &&
-      searchParams.searchText !== '' &&
+      debouncedSearch !== '' &&
       searchParams.filterKey === ''
     ) {
       const modifiedData = data.users.map((user) => ({
         ...user,
         country: user.address.country,
       }));
-      return filterData(modifiedData, searchParams.searchText);
+      return filterData(modifiedData, debouncedSearch);
     } else if (data && data.users.length !== 0) {
       return data.users.map((user) => ({
         ...user,
@@ -77,7 +80,7 @@ const UsersPage: React.FC = () => {
     }
 
     return [];
-  }, [data, searchParams.searchText, searchParams.filterKey]);
+  }, [data, debouncedSearch, searchParams.filterKey]);
 
   const onPageChange = (page: number) => {
     setSearchParams((prevState) => ({
@@ -145,8 +148,8 @@ const UsersPage: React.FC = () => {
               'university',
             ]}
           />
-          {((searchParams.searchText !== '' && searchParams.filterKey !== '') ||
-            searchParams.searchText === '') && (
+          {((debouncedSearch !== '' && searchParams.filterKey !== '') ||
+            debouncedSearch === '') && (
             <Pagination
               totalCount={data?.total as number}
               currentPage={searchParams.currentPage}

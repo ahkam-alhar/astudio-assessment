@@ -11,6 +11,7 @@ import DefaultPageLayout from '../layouts/DefaultPageLayout';
 import NotFound from '../components/NotFound';
 import { filterData } from '../utils/filterData';
 import ProductFilter from '../components/ProductFilter';
+import { useDebounce } from '../hooks/useDebounce';
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchPrams>({
@@ -19,6 +20,8 @@ const ProductsPage: React.FC = () => {
     searchText: '',
     filterKey: '',
   });
+  const debouncedSearch = useDebounce(searchParams.searchText, 300);
+
   const { data, isLoading, isError, isFetching } = useGetProductsQuery(
     {
       limit: searchParams.pageSize,
@@ -27,7 +30,7 @@ const ProductsPage: React.FC = () => {
         'sku,title,brand,category,stock,price,rating,reviews,availabilityStatus,warrantyInformation,discountPercentage,minimumOrderQuantity',
       category: searchParams.filterKey,
     },
-    { skip: searchParams.searchText !== '' && searchParams.filterKey === '' }
+    { skip: debouncedSearch !== '' && searchParams.filterKey === '' }
   );
 
   const {
@@ -37,13 +40,13 @@ const ProductsPage: React.FC = () => {
   } = useGetGategoriesQuery();
 
   const products: IProductTable[] | [] = useMemo(() => {
-    if (data && data.products.length !== 0 && searchParams.searchText !== '') {
+    if (data && data.products.length !== 0 && debouncedSearch !== '') {
       const modifiedData = data.products.map((product) => ({
         ...product,
         reviewCount: product.reviews.length,
         discountPercentage: `${product.discountPercentage}%`,
       }));
-      return filterData(modifiedData, searchParams.searchText);
+      return filterData(modifiedData, debouncedSearch);
     } else if (data && data.products.length !== 0) {
       return data.products.map((product) => ({
         ...product,
@@ -53,7 +56,7 @@ const ProductsPage: React.FC = () => {
     }
 
     return [];
-  }, [data, searchParams.searchText]);
+  }, [data, debouncedSearch]);
 
   const onPageChange = (page: number) => {
     setSearchParams((prevState) => ({
@@ -117,7 +120,7 @@ const ProductsPage: React.FC = () => {
               'minimumOrderQuantity',
             ]}
           />
-          {searchParams.searchText === '' && (
+          {debouncedSearch === '' && (
             <Pagination
               totalCount={data?.total as number}
               currentPage={searchParams.currentPage}
