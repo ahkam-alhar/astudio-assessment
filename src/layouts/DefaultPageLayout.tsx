@@ -13,11 +13,11 @@ const DefaultPageLayout: React.FC<DefaultPageLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="container py-8 flex flex-col items-center">
+    <main className="container py-8 flex flex-col items-center">
       {isLoading && <LoadingSpinner />}
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
       {children}
-    </div>
+    </main>
   );
 };
 

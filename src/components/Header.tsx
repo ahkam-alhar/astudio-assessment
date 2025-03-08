@@ -6,7 +6,7 @@ const Header: React.FC = () => {
 
   return (
     <nav className="bg-[#322625] text-white relative h-12">
-      <div className="container flex justify-between items-center">
+      <div className="container flex justify-between items-center h-full">
         <h1 className="text-xl font-bold">My App</h1>
         <div
           className={`absolute sm:static top-full right-0 w-auto bg-[#322625] sm:flex sm:space-x-4 ${
