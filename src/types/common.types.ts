@@ -22,3 +22,8 @@ export interface FilterButtonProps {
   value: string;
   isSelected: boolean;
 }
+
+export interface FilterDropdownProps {
+  label: string;
+  value: string;
+}

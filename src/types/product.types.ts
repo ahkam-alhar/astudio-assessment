@@ -12,6 +12,12 @@ export interface ProductFilterParams extends FilterParams {
   category?: string;
 }
 
+export interface ProductCategoryResponse {
+  slug: string;
+  name: string;
+  url: string;
+}
+
 export interface IProduct {
   id: number;
   title: string;

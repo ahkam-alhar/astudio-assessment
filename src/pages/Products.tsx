@@ -6,7 +6,7 @@ import {
   useGetProductsQuery,
 } from '../redux/api/productApi';
 import { IProductTable } from '../types/product.types';
-import { SearchPrams } from '../types/common.types';
+import { FilterDropdownProps, SearchPrams } from '../types/common.types';
 import DefaultPageLayout from '../layouts/DefaultPageLayout';
 import NotFound from '../components/NotFound';
 import { filterData } from '../utils/filterData';
@@ -35,7 +35,7 @@ const ProductsPage: React.FC = () => {
   );
 
   const {
-    data: categories,
+    data: categoriesData,
     isLoading: categoriesLoading,
     isError: categoriesError,
   } = useGetGategoriesQuery();
@@ -58,6 +58,18 @@ const ProductsPage: React.FC = () => {
 
     return [];
   }, [data, debouncedSearch]);
+
+  const categories: FilterDropdownProps[] | [] = useMemo(() => {
+    if (categoriesData) {
+      const data = categoriesData.map((val) => ({
+        label: val.name,
+        value: val.slug,
+      }));
+
+      return [{ label: 'All', value: 'All' }, ...data];
+    }
+    return [];
+  }, [categoriesData]);
 
   const onPageChange = (page: number) => {
     setSearchParams((prevState) => ({
@@ -97,7 +109,7 @@ const ProductsPage: React.FC = () => {
         <>
           {categories && categories.length !== 0 && (
             <ProductFilter
-              filters={categories ? ['All', ...categories] : []}
+              filters={categories}
               dropDownValue={searchParams.filterKey}
               onSearch={onSearch}
               onPageSizeChange={onPageSizeChange}

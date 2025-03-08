@@ -1,3 +1,4 @@
+import { FilterDropdownProps } from '../types/common.types';
 import Filter from './core/Filter';
 
 interface ProductFilterProps {
@@ -5,7 +6,7 @@ interface ProductFilterProps {
   onPageSizeChange: (size: number) => void;
   onCategoryChange: (value: string) => void;
   pageSize: number;
-  filters: string[];
+  filters: FilterDropdownProps[];
   dropDownValue: string;
 }
 
@@ -28,9 +29,9 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
         onChange={(e) => onCategoryChange(e.target.value)}
         className="px-4 py-2 rounded-lg border bg-grey text-black"
       >
-        {filters.map((value) => (
-          <option key={value} value={value}>
-            {value}
+        {filters.map((item) => (
+          <option key={item.value} value={item.value}>
+            {item.label}
           </option>
         ))}
       </select>

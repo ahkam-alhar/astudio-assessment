@@ -3,6 +3,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '../utils/apiUtils';
 import {
   IProductResponse,
+  ProductCategoryResponse,
   ProductFilterParams,
 } from '../../types/product.types';
 
@@ -32,9 +33,9 @@ export const productApi = createApi({
         };
       }, // API endpoint
     }),
-    getGategories: builder.query<string[], void>({
+    getGategories: builder.query<ProductCategoryResponse[], void>({
       query: (params) => ({
-        url: '/products/category-list',
+        url: '/products/categories',
         method: 'GET',
         params,
       }), // API endpoint
