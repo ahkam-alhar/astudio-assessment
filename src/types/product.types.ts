@@ -1,3 +1,9 @@
+import { IResponse } from './common.types';
+
+export interface IProductResponse extends IResponse {
+  products: IProduct[];
+}
+
 export interface IProduct {
   id: number;
   title: string;

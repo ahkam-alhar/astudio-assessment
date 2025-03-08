@@ -1,3 +1,9 @@
+import { IResponse } from './common.types';
+
+export interface IUserResponse extends IResponse {
+  users: IUser[];
+}
+
 export interface IUser {
   id: number;
   firstName: string;

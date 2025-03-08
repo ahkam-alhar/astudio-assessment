@@ -1,9 +1,15 @@
-import { IProduct } from './product.types';
-import { IUser } from './user.types';
-
-export interface IResponse<T = IUser | IProduct> {
-  users: T[];
+export interface IResponse {
   total: number;
   skip: number;
   limit: number;
+}
+
+export interface FilterParams {
+  limit?: number;
+  skip?: number;
+}
+
+export interface SearchPrams {
+  pageSize: number;
+  currentPage: number;
 }
