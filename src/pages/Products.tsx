@@ -3,8 +3,8 @@ import DataTable from '../components/DataTable';
 import Pagination from '../components/Pagination';
 import { useGetProductsQuery } from '../redux/api/productApi';
 import { IProduct } from '../types/product.types';
-import LoadingSpinner from '../components/LoadingSpinner';
 import { SearchPrams } from '../types/common.types';
+import DefaultPageLayout from '../layouts/DefaultPageLayout';
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchPrams>({
@@ -28,9 +28,7 @@ const ProductsPage: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      {(isLoading || isFetching) && <LoadingSpinner />}
-      <h1 className="text-2xl font-bold mb-4">Products</h1>
+    <DefaultPageLayout isLoading={isLoading || isFetching} title="Products">
       {isError && <p>Error</p>}
       {!isLoading && !isError && (
         <DataTable
@@ -45,7 +43,7 @@ const ProductsPage: React.FC = () => {
         pageSize={searchParams.pageSize}
         onPageSizeChange={onPageSizeChange}
       />
-    </div>
+    </DefaultPageLayout>
   );
 };
 

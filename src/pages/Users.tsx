@@ -4,7 +4,7 @@ import { useGetUsersQuery } from '../redux/api/userApi';
 import { IUser } from '../types/user.types';
 import { SearchPrams } from '../types/common.types';
 import Pagination from '../components/Pagination';
-import LoadingSpinner from '../components/LoadingSpinner';
+import DefaultPageLayout from '../layouts/DefaultPageLayout';
 
 const UsersPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchPrams>({
@@ -28,9 +28,7 @@ const UsersPage: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      {(isLoading || isFetching) && <LoadingSpinner />}
-      <h1 className="text-2xl font-bold mb-4">Users</h1>
+    <DefaultPageLayout title="Users" isLoading={isLoading || isFetching}>
       {isError && <p>Error</p>}
       {!isLoading && !isError && (
         <DataTable
@@ -45,7 +43,7 @@ const UsersPage: React.FC = () => {
         pageSize={searchParams.pageSize}
         onPageSizeChange={onPageSizeChange}
       />
-    </div>
+    </DefaultPageLayout>
   );
 };
 
