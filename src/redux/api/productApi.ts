@@ -13,7 +13,7 @@ export const productApi = createApi({
     // Define your endpoints here
     getProducts: builder.query<IProductResponse, ProductFilterParams>({
       query: (params) => {
-        if (params.category) {
+        if (params.category && params.category !== 'All') {
           return {
             url: `/products/category/${params.category}`,
             method: 'GET',

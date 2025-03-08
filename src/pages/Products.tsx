@@ -90,7 +90,7 @@ const ProductsPage: React.FC = () => {
       {(isError || categoriesError) && <p>Error</p>}
       {categories && categories.length !== 0 && (
         <ProductFilter
-          filters={categories ? ['', ...categories] : []}
+          filters={categories ? ['All', ...categories] : []}
           dropDownValue={searchParams.filterKey}
           onSearch={onSearch}
           onPageSizeChange={onPageSizeChange}

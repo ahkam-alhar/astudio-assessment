@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import MenuIcon from '../assets/icons/MenuIcon.svg';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,20 +30,7 @@ const Header: React.FC = () => {
           </Link>
         </div>
         <button className="sm:hidden" onClick={() => setIsOpen(!isOpen)}>
-          <svg
-            className="w-6 h-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 6h16M4 12h16M4 18h16"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img src={MenuIcon} alt="Menu" className="w-6 h-6" />
         </button>
       </div>
     </nav>
