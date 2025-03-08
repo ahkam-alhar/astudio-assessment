@@ -12,6 +12,7 @@ import NotFound from '../components/NotFound';
 import { filterData } from '../utils/filterData';
 import ProductFilter from '../components/ProductFilter';
 import { useDebounce } from '../hooks/useDebounce';
+import ErrorPage from '../components/ErrorPage';
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useState<SearchPrams>({
@@ -90,47 +91,52 @@ const ProductsPage: React.FC = () => {
       isLoading={isLoading || isFetching || categoriesLoading}
       title="Products"
     >
-      {(isError || categoriesError) && <p>Error</p>}
-      {categories && categories.length !== 0 && (
-        <ProductFilter
-          filters={categories ? ['All', ...categories] : []}
-          dropDownValue={searchParams.filterKey}
-          onSearch={onSearch}
-          onPageSizeChange={onPageSizeChange}
-          pageSize={searchParams.pageSize}
-          onCategoryChange={onCategoryChange}
-        />
-      )}
-      {products.length !== 0 ? (
+      {isError || categoriesError ? (
+        <ErrorPage />
+      ) : (
         <>
-          <DataTable
-            data={products}
-            headers={[
-              'sku',
-              'title',
-              'brand',
-              'category',
-              'stock',
-              'price',
-              'rating',
-              'reviewCount',
-              'availabilityStatus',
-              'warrantyInformation',
-              'discountPercentage',
-              'minimumOrderQuantity',
-            ]}
-          />
-          {debouncedSearch === '' && (
-            <Pagination
-              totalCount={data?.total as number}
-              currentPage={searchParams.currentPage}
-              onPageChange={onPageChange}
+          {categories && categories.length !== 0 && (
+            <ProductFilter
+              filters={categories ? ['All', ...categories] : []}
+              dropDownValue={searchParams.filterKey}
+              onSearch={onSearch}
+              onPageSizeChange={onPageSizeChange}
               pageSize={searchParams.pageSize}
+              onCategoryChange={onCategoryChange}
             />
           )}
+          {products.length !== 0 ? (
+            <>
+              <DataTable
+                data={products}
+                headers={[
+                  'sku',
+                  'title',
+                  'brand',
+                  'category',
+                  'stock',
+                  'price',
+                  'rating',
+                  'reviewCount',
+                  'availabilityStatus',
+                  'warrantyInformation',
+                  'discountPercentage',
+                  'minimumOrderQuantity',
+                ]}
+              />
+              {debouncedSearch === '' && (
+                <Pagination
+                  totalCount={data?.total as number}
+                  currentPage={searchParams.currentPage}
+                  onPageChange={onPageChange}
+                  pageSize={searchParams.pageSize}
+                />
+              )}
+            </>
+          ) : (
+            <>{!isLoading && <NotFound />}</>
+          )}
         </>
-      ) : (
-        <>{!isLoading && <NotFound />}</>
       )}
     </DefaultPageLayout>
   );

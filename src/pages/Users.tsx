@@ -9,6 +9,7 @@ import NotFound from '../components/NotFound';
 import { filterData } from '../utils/filterData';
 import UserFilter from '../components/UserFilter';
 import { useDebounce } from '../hooks/useDebounce';
+import ErrorPage from '../components/ErrorPage';
 
 const userFilters: FilterButtonProps[] = [
   {
@@ -121,45 +122,50 @@ const UsersPage: React.FC = () => {
 
   return (
     <DefaultPageLayout title="Users" isLoading={isLoading || isFetching}>
-      {isError && <p>Error</p>}
-      <UserFilter
-        filters={filters}
-        onSearch={onSearch}
-        onFilterSelect={onFilterSelect}
-        onPageSizeChange={onPageSizeChange}
-        pageSize={searchParams.pageSize}
-      />
-      {users.length !== 0 ? (
+      {isError ? (
+        <ErrorPage />
+      ) : (
         <>
-          <DataTable
-            data={users}
-            headers={[
-              'firstName',
-              'lastName',
-              'maidenName',
-              'age',
-              'gender',
-              'email',
-              'username',
-              'bloodGroup',
-              'eyeColor',
-              'phone',
-              'country',
-              'university',
-            ]}
+          <UserFilter
+            filters={filters}
+            onSearch={onSearch}
+            onFilterSelect={onFilterSelect}
+            onPageSizeChange={onPageSizeChange}
+            pageSize={searchParams.pageSize}
           />
-          {((debouncedSearch !== '' && searchParams.filterKey !== '') ||
-            debouncedSearch === '') && (
-            <Pagination
-              totalCount={data?.total as number}
-              currentPage={searchParams.currentPage}
-              onPageChange={onPageChange}
-              pageSize={searchParams.pageSize}
-            />
+          {users.length !== 0 ? (
+            <>
+              <DataTable
+                data={users}
+                headers={[
+                  'firstName',
+                  'lastName',
+                  'maidenName',
+                  'age',
+                  'gender',
+                  'email',
+                  'username',
+                  'bloodGroup',
+                  'eyeColor',
+                  'phone',
+                  'country',
+                  'university',
+                ]}
+              />
+              {((debouncedSearch !== '' && searchParams.filterKey !== '') ||
+                debouncedSearch === '') && (
+                <Pagination
+                  totalCount={data?.total as number}
+                  currentPage={searchParams.currentPage}
+                  onPageChange={onPageChange}
+                  pageSize={searchParams.pageSize}
+                />
+              )}
+            </>
+          ) : (
+            <>{!isLoading && <NotFound />}</>
           )}
         </>
-      ) : (
-        <>{!isLoading && <NotFound />}</>
       )}
     </DefaultPageLayout>
   );
